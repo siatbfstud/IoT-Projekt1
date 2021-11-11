@@ -38,7 +38,7 @@ while True:
     try:
         lib.c.publish(topic=mapFeed, msg=gpsfunk.gps_funk(False))
         print(gpsfunk.gps_funk(True))
-        
+
         lib.c.publish(topic=zoneFeed, msg=str(gpsfunk.gps_funk(True)))
         #lib.c.publish(topic=zoneFeed, msg="0")
         
