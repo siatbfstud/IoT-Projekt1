@@ -7,7 +7,22 @@ mapFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'map/csv'), 'utf-8')
 speedFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'speed/csv'), 'utf-8')
 i2c = I2C(1, scl=Pin(22), sda=Pin(21), freq = 10000)
 mpu= mpu6050.accel(i2c)
-#TEST
+
+
+""" 
+
+TO DO 
+Start og stop Funktion
+
+Når spiller forlader zone
+1. Tænd vibrator
+2. Tænd LED ring
+3. Ude af zone starttid og tid brugt ude.
+
+
+
+"""
+
 while True:
     if lib.c.is_conn_issue():
         while lib.c.is_conn_issue():
