@@ -36,8 +36,8 @@ def gps_funk():
             #print("gps_ada: ",gps_ada)
             print('latitude:', gps.latitude[0])
             print('longitude:', gps.longitude[0])
-            return geofence.testzone(gps.latitude[0], gps.longitude[0])
-            #return gps_ada
+            geofence.testzone(gps.latitude[0], gps.longitude[0])
+            return gps_ada
 if __name__ == "__gps_funk__":
     print('...running gps_funk, GPS testing')
     gps_funk()
