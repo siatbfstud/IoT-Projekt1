@@ -53,4 +53,4 @@ def gps_funk(testZone:bool):
 
 if __name__ == "__gps_funk__":
     print('...running gps_funk, GPS testing')
-    gps_funk()
+    gps_funk(False)
