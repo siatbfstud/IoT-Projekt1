@@ -1,4 +1,5 @@
 import haversine
+import math
 
 class Zone:
     """Class for hver enkelte zone"""
@@ -17,6 +18,14 @@ class Zone:
         self.borders = borders
         #print(borders)
         return borders
+    
+    def rotate_zone(self, angle):
+        rad = math.radians(angle)
+        c, s = math.cos(rad), math.sin(rad)
+        result = []
+        for x,y in self.borders:
+            result.append([c*x-y*s, x*s+y*c])
+        print(result)
 
 class Player:
     """Class for hver spiller/GPS enhed"""

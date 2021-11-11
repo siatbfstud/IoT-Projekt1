@@ -7,7 +7,8 @@
         "micropy-cli": "*"
     },
     "packages": {
-        "fusion-py": "*"
+        "fusion-py": "*",
+        "numpy": "*"
     },
     "config": {
         "vscode": true,
