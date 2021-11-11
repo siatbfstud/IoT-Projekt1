@@ -52,8 +52,8 @@ while True:
         sleep(10) 
 
     except KeyboardInterrupt:
-        print('Ctrl-C pressed...exiting')
         lib.c.publish(topic=zoneFeed, msg="0")
+        print('Ctrl-C pressed...exiting')
         lib.c.disconnect()
         lib.wifi.active(False)
         lib.sys.exit()
