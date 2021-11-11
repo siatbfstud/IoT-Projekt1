@@ -20,6 +20,8 @@ Når spiller forlader zone
 2. Tænd LED ring
 3. Ude af zone starttid og tid brugt ude.
 
+Nyt map feed, som kan vise zoner
+
 Send 0 til indikator ADA, ved slut
 
 
@@ -38,7 +40,7 @@ while True:
         print(gpsfunk.gps_funk(True))
         
         lib.c.publish(topic=zoneFeed, msg=str(gpsfunk.gps_funk(True)))
-
+        #lib.c.publish(topic=zoneFeed, msg="0")
         
         #Gyroskop
         mpu.get_values()
@@ -49,11 +51,12 @@ while True:
         #speed = speed[:4]
         #print("speed: ",speed)
         #lib.c.publish(topic=speedFeed, msg=speed)
-        sleep(10) 
+        sleep(5) 
 
     except KeyboardInterrupt:
         lib.c.publish(topic=zoneFeed, msg="0")
         print('Ctrl-C pressed...exiting')
+        sleep(3)
         lib.c.disconnect()
         lib.wifi.active(False)
         lib.sys.exit()

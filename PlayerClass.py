@@ -15,7 +15,7 @@ class Zone:
                     seBorder,
                     [nwBorder[0],seBorder[1]]]
         self.borders = borders
-        print(borders)
+        #print(borders)
         return borders
 
 class Player:

@@ -19,6 +19,7 @@ def deg2rad(deg):
     return deg * (math.pi/180)
 
 
+# MANGLER AT LAVE ZONE UD FRA DIRECTION, BRUG GYROSKOP
 def makeZone(playerPos,x,y):
     negResult = []
     result = []
@@ -27,7 +28,7 @@ def makeZone(playerPos,x,y):
         result.append(item1+item2)
         negResult.append(item2-item1)
 
-    print(result, negResult)
+    #print(result, negResult)
     return [result,negResult]
 
 
