@@ -34,7 +34,8 @@ while True:
             lib.c.resubscribe()
     try:
         lib.c.publish(topic=mapFeed, msg=gpsfunk.gps_funk(False))
-        lib.c.publish(topic=zoneFeed, msg=gpsfunk.gps_funk(True))
+        print(gpsfunk.gps_funk(True))
+        #lib.c.publish(topic=zoneFeed, msg=gpsfunk.gps_funk(True))
 
         
         #Gyroskop
