@@ -8,7 +8,7 @@ mapFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'map/csv'), 'utf-8')
 speedFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'speed/csv'), 'utf-8')
 i2c = I2C(1, scl=Pin(22), sda=Pin(21), freq = 10000)
 mpu= mpu6050.accel(i2c)
-
+#TEST
 while True:
     if lib.c.is_conn_issue():
         while lib.c.is_conn_issue():
