@@ -1,13 +1,13 @@
 import umqtt_robust2, gpsfunk, mpu6050, geofence
-from machine import Pin, I2C
+from machine import Pin, SoftI2C
+from imu import MPU6050
 from time import sleep
 
 lib = umqtt_robust2
 mapFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'map/csv'), 'utf-8')
 speedFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'speed/csv'), 'utf-8')
 zoneFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'zone/csv'), 'utf-8')
-i2c = I2C(scl=Pin(22), sda=Pin(21), freq = 10000)
-mpu= mpu6050.accel(i2c)
+
 
 
 """ 
@@ -43,8 +43,12 @@ while True:
         #lib.c.publish(topic=zoneFeed, msg="0")
         
         #Gyroskop
-        mpu.get_values()
-        print(mpu.get_values())
+        imu = MPU6050(SoftI2C(scl=Pin(22), sda=Pin(21)))
+        print("Accel: ", imu.accel.xyz)
+        print("Gyro: ", imu.gyro.xyz)
+        #print(imu.mag.xyz)
+        print("Temp: ", imu.temperature)
+        print("Accel z: ", imu.accel.z)
         
         #Gps hastighed
         #speed = gpsfunk.gps_funk(False)
