@@ -1,24 +1,33 @@
-import umqtt_robust2
-import GPSfunk
-from machine import Pin
+import umqtt_robust2, GPSfunk, mpu6050
+from machine import Pin, I2C
 from time import sleep_ms, sleep
+from geofence import testzone
 
 lib = umqtt_robust2
 mapFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'map/csv'), 'utf-8')
 speedFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'speed/csv'), 'utf-8')
+i2c = I2C(1, scl=Pin(22), sda=Pin(21), freq = 10000)
+mpu= mpu6050.accel(i2c)
 
 while True:
     if lib.c.is_conn_issue():
         while lib.c.is_conn_issue():
-            # hvis der forbindes returnere is_conn_issue metoden ingen fejlmeddelse
             lib.c.reconnect()
         else:
             lib.c.resubscribe()
     try:
         lib.c.publish(topic=mapFeed, msg=GPSfunk.gps_funk())
+        
+
+        
+        #Gyroskop
+        mpu.get_values()
+        print(mpu.get_values())
+        
+        #Gps hastighed
         speed = GPSfunk.gps_funk()
         speed = speed[:4]
-        print("speed: ",speed)
+        #print("speed: ",speed)
         lib.c.publish(topic=speedFeed, msg=speed)
         sleep(10) 
 
