@@ -6,7 +6,9 @@
     "dev-packages": {
         "micropy-cli": "*"
     },
-    "packages": {},
+    "packages": {
+        "fusion-py": "*"
+    },
     "config": {
         "vscode": true,
         "pylint": true

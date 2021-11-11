@@ -2,6 +2,7 @@ import umqtt_robust2, gpsfunk, mpu6050, geofence
 from machine import Pin, SoftI2C
 from imu import MPU6050
 from time import sleep
+import fusion
 
 lib = umqtt_robust2
 mapFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'map/csv'), 'utf-8')
@@ -46,10 +47,13 @@ while True:
         imu = MPU6050(SoftI2C(scl=Pin(22), sda=Pin(21)))
         print("Accel: ", imu.accel.xyz)
         print("Gyro: ", imu.gyro.xyz)
-        #print(imu.mag.xyz)
-        print("Temp: ", imu.temperature)
-        print("Accel z: ", imu.accel.z)
         
+        #print(imu.mag.xyz)
+        gyroHeading = fusion.Fusion()
+        gyroHeading.update_nomag(imu.accel.xyz,imu.gyro.xyz)
+        print(gyroHeading.pitch)
+        
+
         #Gps hastighed
         #speed = gpsfunk.gps_funk(False)
         #speed = speed[:4]
