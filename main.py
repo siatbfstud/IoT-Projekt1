@@ -5,6 +5,7 @@ from time import sleep
 lib = umqtt_robust2
 mapFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'map/csv'), 'utf-8')
 speedFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'speed/csv'), 'utf-8')
+zoneFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'zone/csv'), 'utf-8')
 i2c = I2C(1, scl=Pin(22), sda=Pin(21), freq = 10000)
 mpu= mpu6050.accel(i2c)
 
@@ -23,6 +24,8 @@ Når spiller forlader zone
 
 """
 
+
+
 while True:
     if lib.c.is_conn_issue():
         while lib.c.is_conn_issue():
@@ -30,8 +33,8 @@ while True:
         else:
             lib.c.resubscribe()
     try:
-        lib.c.publish(topic=mapFeed, msg=gpsfunk.gps_funk())
-        
+        lib.c.publish(topic=mapFeed, msg=gpsfunk.gps_funk(False))
+        lib.c.publish(topic=zoneFeed, msg=gpsfunk.gps_funk(True))
 
         
         #Gyroskop
@@ -39,10 +42,10 @@ while True:
         print(mpu.get_values())
         
         #Gps hastighed
-        speed = gpsfunk.gps_funk()
-        speed = speed[:4]
+        #speed = gpsfunk.gps_funk(False)
+        #speed = speed[:4]
         #print("speed: ",speed)
-        lib.c.publish(topic=speedFeed, msg=speed)
+        #lib.c.publish(topic=speedFeed, msg=speed)
         sleep(10) 
 
     except KeyboardInterrupt:
