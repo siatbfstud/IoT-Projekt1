@@ -1,5 +1,5 @@
 import picket
-import GPSfunk
+import gpsfunk
 
 def testzone(lat, lon):
     my_fence = picket.Fence()
@@ -20,5 +20,7 @@ def testzone(lat, lon):
 #     assert my_fence.check_point((lat, lon)), "The statement is false :D"
     if my_fence.check_point((lat, lon)) == True:
         print("Inde i zonen")
+        return True
     else:
         print("Ude af zonen")
+        return False
