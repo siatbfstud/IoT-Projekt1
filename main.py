@@ -1,7 +1,6 @@
-import umqtt_robust2, GPSfunk, mpu6050
+import umqtt_robust2, gpsfunk, mpu6050, geofence
 from machine import Pin, I2C
-from time import sleep_ms, sleep
-from geofence import testzone
+from time import sleep
 
 lib = umqtt_robust2
 mapFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'map/csv'), 'utf-8')
@@ -16,7 +15,7 @@ while True:
         else:
             lib.c.resubscribe()
     try:
-        lib.c.publish(topic=mapFeed, msg=GPSfunk.gps_funk())
+        lib.c.publish(topic=mapFeed, msg=gpsfunk.gps_funk())
         
 
         
@@ -25,7 +24,7 @@ while True:
         print(mpu.get_values())
         
         #Gps hastighed
-        speed = GPSfunk.gps_funk()
+        speed = gpsfunk.gps_funk()
         speed = speed[:4]
         #print("speed: ",speed)
         lib.c.publish(topic=speedFeed, msg=speed)
