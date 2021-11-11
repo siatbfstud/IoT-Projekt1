@@ -1,0 +1,49 @@
+{
+    "MicroPython.executeButton": [
+        {
+            "text": "\u00e2\u2013\u00b6",
+            "tooltip": "Run",
+            "alignment": "left",
+            "command": "extension.executeFile",
+            "priority": 3.5
+        }
+    ],
+    "MicroPython.syncButton": [
+        {
+            "text": "$(sync)",
+            "tooltip": "sync",
+            "alignment": "left",
+            "command": "extension.execute",
+            "priority": 4
+        }
+    ],
+    "python.linting.enabled": true,
+    "python.jediEnabled": false,
+    "python.autoComplete.extraPaths": [
+        ".micropy\\BradenM-micropy-stubs-ebac1d3\\frozen",
+        ".micropy\\BradenM-micropy-stubs-4f5a52a\\frozen",
+        ".micropy\\BradenM-micropy-stubs-ebac1d3\\stubs",
+        ".micropy\\IoT_DUT"
+    ],
+    "python.autoComplete.typeshedPaths": [
+        ".micropy\\BradenM-micropy-stubs-ebac1d3\\frozen",
+        ".micropy\\BradenM-micropy-stubs-4f5a52a\\frozen",
+        ".micropy\\BradenM-micropy-stubs-ebac1d3\\stubs",
+        ".micropy\\IoT_DUT"
+    ],
+    "python.analysis.typeshedPaths": [
+        ".micropy\\BradenM-micropy-stubs-ebac1d3\\frozen",
+        ".micropy\\BradenM-micropy-stubs-4f5a52a\\frozen",
+        ".micropy\\BradenM-micropy-stubs-ebac1d3\\stubs",
+        ".micropy\\IoT_DUT"
+    ],
+    "python.linting.pylintEnabled": true,
+    "python.analysis.extraPaths": [
+        ".micropy\\BradenM-micropy-stubs-ebac1d3\\frozen",
+        ".micropy\\BradenM-micropy-stubs-4f5a52a\\frozen",
+        ".micropy\\BradenM-micropy-stubs-ebac1d3\\stubs",
+        ".micropy\\IoT_DUT"
+    ],
+    "python.linting.banditEnabled": false,
+    "python.languageServer": "Pylance"
+}
