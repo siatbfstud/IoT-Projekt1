@@ -6,7 +6,7 @@ lib = umqtt_robust2
 mapFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'map/csv'), 'utf-8')
 speedFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'speed/csv'), 'utf-8')
 zoneFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'zone/csv'), 'utf-8')
-i2c = I2C(1, scl=Pin(22), sda=Pin(21), freq = 10000)
+i2c = I2C(scl=Pin(22), sda=Pin(21), freq = 10000)
 mpu= mpu6050.accel(i2c)
 
 
