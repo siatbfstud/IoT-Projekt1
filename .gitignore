@@ -38,6 +38,7 @@ MANIFEST
 *.manifest
 *.spec
 
+credentials.py
 pymakr.conf
 
 # Installer logs

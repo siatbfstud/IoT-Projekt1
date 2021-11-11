@@ -2,10 +2,12 @@ from machine import UART
 from micropyGPS import MicropyGPS
 import geofence, PlayerClass
 
+player = PlayerClass.Player(0,0)
+
 def gps_funk(testZone:bool):
     uart = UART(2, baudrate=9600, bits=8, parity=None, stop=1, timeout=5000, rxbuf=1024)
     gps = MicropyGPS()
-    player = PlayerClass.Player(0,0)
+    
     while True:
         buf = uart.readline()
 
@@ -34,6 +36,7 @@ def gps_funk(testZone:bool):
         # _thread.start_new_thread(main, ())
 
         if gps.latitude[0] != 0.0 and testZone == False:
+            
             player.lat = gps.latitude[0]
             player.lon = gps.longitude[0]
             
@@ -44,6 +47,7 @@ def gps_funk(testZone:bool):
             return gps_ada
 
         if testZone == True:
+            #print(player.lat,player.lon)
             return int(geofence.testzone(player.lat,player.lon))
 
 
