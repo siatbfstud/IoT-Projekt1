@@ -12,7 +12,7 @@ def zone_setup(lat,lon):
     borders = testZone.calculate_borders(testZone.nwBorder, testZone.seBorder)
     for i in range(4):
         my_fence.add_point(borders[i])
-    print(my_fence.points)
+    #print(my_fence.points)
 
 def testzone(lat, lon):
     #Inde i zone
