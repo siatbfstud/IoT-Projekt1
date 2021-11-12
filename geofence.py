@@ -3,7 +3,6 @@ import gpsfunk
 import haversine
 import PlayerClass
 
-
 my_fence = picket.Fence()
 
 def zone_setup(lat,lon):
@@ -30,7 +29,6 @@ def testzone(lat, lon):
 #     my_fence.add_point((55.707507, 12.537038))
 #     my_fence.add_point((55.707581, 12.538344))
 
-#     assert my_fence.check_point((lat, lon)), "The statement is false :D"
     if my_fence.check_point((lat, lon)) == True:
         print("Inde i zonen")
         return True
