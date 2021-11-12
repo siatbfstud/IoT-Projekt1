@@ -6,12 +6,12 @@ import PlayerClass
 my_fence = picket.Fence()
 
 def zone_setup(lat,lon):
-    mkzoneRes = haversine.makeZone([lat,lon],2,4)
+    mkzoneRes = haversine.makeZone([lat,lon],8,2)
     tempZone = PlayerClass.Zone(mkzoneRes[0], mkzoneRes[1])
     borders = tempZone.calculate_borders(tempZone.nwBorder, tempZone.seBorder)
     for i in range(4):
         my_fence.add_point(borders[i])
-    #print(my_fence.points)
+    print(my_fence.points)
 
 def testzone(lat, lon):
     #Inde i zone
