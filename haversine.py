@@ -1,3 +1,5 @@
+from PlayerClass import Player, Zone
+
 import math
 
 def main():
@@ -21,19 +23,38 @@ def deg2rad(deg):
 
 # MANGLER AT LAVE ZONE UD FRA DIRECTION, BRUG GYROSKOP
 def makeZone(playerPos,x,y):
+    """X og Y er bredde og længde på kassen"""
     negResult = []
     result = []
+
+    nonRotatedNegResult = []
+    nonRotatedResult = []
+
+    bordersToRotate = Zone((x,y),(-x,-y))
+    #bordersToRotate.calculate_borders(bordersToRotate.nwBorder,bordersToRotate.seBorder)
+    bordersToRotate.rotate_zone(90)
+
     points = [x*meterPerDeg,y*meterPerDeg]
+    for (item1, item2) in zip(points,playerPos):
+        nonRotatedResult.append(item1+item2)
+        nonRotatedNegResult.append(item2-item1)
+
+    print("Non Rotated:", nonRotatedResult, nonRotatedNegResult)
+
+    newX = bordersToRotate.nwBorder[0]
+    newY = bordersToRotate.nwBorder[1]
+    print(newY)
+
+    points = [newX*meterPerDeg,newY*meterPerDeg]
     for (item1, item2) in zip(points,playerPos):
         result.append(item1+item2)
         negResult.append(item2-item1)
 
     #print(result, negResult)
+    print("Rotated", result,negResult)
     return [result,negResult]
 
 
-
-makeZone([55.6070031852261, 12.552418380351071],4,5)
 
 if __name__ == "__main__":
     main()

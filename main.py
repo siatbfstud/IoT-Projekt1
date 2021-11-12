@@ -5,9 +5,8 @@ from time import sleep
 
 vib = Pin(19, Pin.OUT, value = 0)
 lib = umqtt_robust2
-mapFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'map/csv'), 'utf-8')
-speedFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'speed/csv'), 'utf-8')
-zoneFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'zone/csv'), 'utf-8')
+mapFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.map/csv'), 'utf-8')
+zoneFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.zone/csv'), 'utf-8')
 
 
 
@@ -55,10 +54,6 @@ while True:
         else:
             lib.c.resubscribe()
     try:
-        led_ring_controller.bounce(240, 0, 0, 150)
-        sleep(10)
-        led_ring_controller.clear()
-        
         lib.c.publish(topic=mapFeed, msg=gpsfunk.gps_funk(False))
         print(gpsfunk.gps_funk(True))
 
@@ -66,9 +61,8 @@ while True:
         #lib.c.publish(topic=zoneFeed, msg="0")
         
         #Gyroskop
-        imu = MPU6050(SoftI2C(scl=Pin(22), sda=Pin(21)))
-        print("Accel: ", imu.accel.xyz)
-        print("Gyro: ", imu.gyro.xyz)
+        #imu = MPU6050(SoftI2C(scl=Pin(22), sda=Pin(21)))
+        
         #print(imu.mag.xyz)
         
         #Vibrator
@@ -77,11 +71,6 @@ while True:
         vib.value(0)
         """
 
-        #Gps hastighed
-        #speed = gpsfunk.gps_funk(False)
-        #speed = speed[:4]
-        #print("speed: ",speed)
-        #lib.c.publish(topic=speedFeed, msg=speed)
         sleep(5) 
 
     except KeyboardInterrupt:

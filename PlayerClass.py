@@ -7,7 +7,7 @@ class Zone:
     def __init__(self, nwBorder:tuple, seBorder:tuple):
         self.nwBorder = nwBorder
         self.seBorder = seBorder
-        self.borders = []
+        self.borders = [nwBorder,seBorder]
 
     #Udregner zonens 4 hjørner, ved hjælp af 2 modsatte hjørner.
     def calculate_borders(self, nwBorder:list, seBorder:list):
@@ -25,7 +25,10 @@ class Zone:
         result = []
         for x,y in self.borders:
             result.append([c*x-y*s, x*s+y*c])
-        print(result)
+        print("Rotated before conversion",result)
+        return result
+    
+
 
 class Player:
     """Class for hver spiller/GPS enhed"""
@@ -35,13 +38,13 @@ class Player:
         self.pos = [lat,lon]
 
 
-zone1 = Zone([1,9], (7,3))
-player1 = Player(55.64266121248321, 12.612958544710214)
+#zone1 = Zone([1,9], (7,3))
+#player1 = Player(55.64266121248321, 12.612958544710214)
 
-nextBorderCal = haversine.makeZone(player1.pos,5,10)
+#nextBorderCal = haversine.makeZone(player1.pos,5,10)
 
 #Længde og breddegrader for zone
-Zone.calculate_borders(Zone, nextBorderCal[0],nextBorderCal[1])
+#Zone.calculate_borders(Zone, nextBorderCal[0],nextBorderCal[1])
 
 
 
