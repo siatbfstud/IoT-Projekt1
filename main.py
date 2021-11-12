@@ -6,26 +6,27 @@ from time import sleep
 vib = Pin(19, Pin.OUT, value = 0)
 lib = umqtt_robust2
 mapFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.map/csv'), 'utf-8')
-zoneFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.zone/csv'), 'utf-8')
+indicatorFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.indicator/csv'), 'utf-8')
+toggleFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'bot_sub/csv'), 'utf-8')
+debugFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.debug/csv'), 'utf-8')
 
-
+running = False
 
 """ 
 
 TO DO 
-Start og stop Funktion
+Start og stop Funktion DONE
 
 Når spiller forlader zone
-1. Tænd vibrator
-2. Tænd LED ring
-3. Ude af zone starttid og tid brugt ude.
+1. Tænd vibrator DONE
+2. Tænd LED ring DONE
+3. Ude af zone starttid til graf og tid brugt ude.
 
 Nyt map feed, som kan vise zoner
 
 Send 0 til indikator ADA, ved slut
 
-
-Vesten bliver taget på og er ikke tændt selvom den er sluttet til strøm.
+DONE Vesten bliver taget på og er ikke tændt selvom den er sluttet til strøm.
 
  - Self generated zones uden knap - 
     Spilleren stiller sig i midten af den zone han skal spille i og vender sig mod et mål.
@@ -45,6 +46,8 @@ Når en zone "lukkes", bliver data timestamp og tid ude fra zonen lagt på et fe
 
 """
 
+def send_debug_info(string):
+    lib.c.publish(topic=debugFeed, msg=string)
 
 
 while True:
@@ -54,29 +57,39 @@ while True:
         else:
             lib.c.resubscribe()
     try:
-        lib.c.publish(topic=mapFeed, msg=gpsfunk.gps_funk(False))
-        print(gpsfunk.gps_funk(True))
+        if lib.besked == "1":
+            running = True
+        else:
+            print("Not Running")
+            running = False
+        while running:
+            lib.c.publish(topic=mapFeed, msg=gpsfunk.gps_funk(False))
+            #print(gpsfunk.gps_funk(True))
+            #DON'T DELETE
+            lib.c.publish(topic=indicatorFeed, msg=str(gpsfunk.gps_funk(True)))
+            
 
-        lib.c.publish(topic=zoneFeed, msg=str(gpsfunk.gps_funk(True)))
-        #lib.c.publish(topic=zoneFeed, msg="0")
-        
-        #Gyroskop
-        #imu = MPU6050(SoftI2C(scl=Pin(22), sda=Pin(21)))
-        
-        #print(imu.mag.xyz)
-        
-        #Vibrator
-        """
-        vib.value(1)
-        vib.value(0)
-        """
+            #lib.c.publish(topic=zoneFeed, msg="0")
 
-        sleep(5) 
+            #Gyroskop
+            #imu = MPU6050(SoftI2C(scl=Pin(22), sda=Pin(21)))
+
+            #print(imu.mag.xyz)
+
+            
+            lib.c.check_msg()
+            lib.c.send_queue()
+            if lib.besked == "0":
+                running = False
+            sleep(2)
+
+        sleep(2) 
 
     except KeyboardInterrupt:
-        lib.c.publish(topic=zoneFeed, msg="0")
+        lib.c.publish(topic=indicatorFeed, msg="0")
         print('Ctrl-C pressed...exiting')
         sleep(3)
+        led_ring_controller.clear()
         lib.c.disconnect()
         lib.wifi.active(False)
         lib.sys.exit()
