@@ -67,9 +67,6 @@ while True:
             #print(gpsfunk.gps_funk(True))
             #DON'T DELETE
             lib.c.publish(topic=indicatorFeed, msg=str(gpsfunk.gps_funk(True)))
-            
-
-            #lib.c.publish(topic=zoneFeed, msg="0")
 
             #Gyroskop
             #imu = MPU6050(SoftI2C(scl=Pin(22), sda=Pin(21)))
@@ -82,7 +79,6 @@ while True:
             if lib.besked == "0":
                 running = False
             sleep(2)
-
         sleep(2) 
 
     except KeyboardInterrupt:

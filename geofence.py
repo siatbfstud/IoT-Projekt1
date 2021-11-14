@@ -10,16 +10,14 @@ vib = Pin(19, Pin.OUT, value = 0)
 my_fence = picket.Fence()
 
 def zone_setup(lat,lon):
-    """ mkzoneRes = haversine.makeZone([lat,lon],8,2)
+    mkzoneRes = haversine.makeZone([lat,lon],8,2)
     tempZone = PlayerClass.Zone(mkzoneRes[0], mkzoneRes[1])
     borders = tempZone.calculate_borders(tempZone.nwBorder, tempZone.seBorder)
-    for i in range(4):
-        my_fence.add_point(borders[i]) """
+    #Sæt 100 til hvad zonen skal drejes
+    rotatedBorders = tempZone.rotate_zone([lat,lon], borders, 100)
 
-    my_fence.add_point((55.706677, 12.538627))
-    my_fence.add_point((55.706165, 12.538455))
-    my_fence.add_point((55.705993, 12.540409))
-    my_fence.add_point((55.706570, 12.540522))
+    for i in range(4):
+        my_fence.add_point(rotatedBorders[i])
 
 
     #print(my_fence.points)

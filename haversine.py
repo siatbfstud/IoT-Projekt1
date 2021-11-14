@@ -26,9 +26,7 @@ def makeZone(playerPos,x,y):
     """X og Y er bredde og længde på kassen"""
     negResult = []
     result = []
-
-    #bordersToRotate.rotate_zone(90)
-
+    
     points = [x*meterPerDeg,y*meterPerDeg]
     for (item1, item2) in zip(points,playerPos):
         result.append(item1+item2)
