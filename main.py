@@ -1,6 +1,5 @@
-import umqtt_robust2, gpsfunk, mpu6050, geofence, led_ring_controller
+import umqtt_robust2, gpsfunk, geofence, led_ring_controller
 from machine import Pin, SoftI2C
-from imu import MPU6050
 from time import sleep
 import hmc5883l
 import _thread as t
@@ -22,14 +21,12 @@ Start og stop Funktion DONE
 
 Når spiller forlader zone
 1. Tænd vibrator DONE
-2. Tænd LED ring DONE
+2. Tænd LED ring
 3. Ude af zone starttid til graf og tid brugt ude.
 
-Nyt map feed, som kan vise zoner
+Send 0 til indikator ADA, ved slut DONE
 
-Send 0 til indikator ADA, ved slut
-
-DONE Vesten bliver taget på og er ikke tændt selvom den er sluttet til strøm.
+Vesten bliver taget på og er ikke tændt selvom den er sluttet til strøm. DONE
 
  - Self generated zones uden knap - 
     Spilleren stiller sig i midten af den zone han skal spille i og vender sig mod et mål.
@@ -38,8 +35,9 @@ DONE Vesten bliver taget på og er ikke tændt selvom den er sluttet til strøm.
 
 
  - Pre defined zones med knap - 
-    Spilleren stiller sig et sted i sin zone og klikker på sin knap på vesten. 
-    Zonen er aktiv og sender data indtil knappen bliver trykket på igen
+    Spilleren stiller sig et sted i sin zone der er defineret og valgt i adafruit. 
+    Når spilleren er ude af zonen bliver data sendt til adafruit med tidspunkter.
+    
 
 Når spilleren er ude fra zonen, bouncer LED-ring rødt og vibrator tænder. 
 Samtidig ændrer Zone-indicatoren på adafruit til rød og et timestamp, samt hvor lang tid personen var ude af zonen sendt til adafruit.
