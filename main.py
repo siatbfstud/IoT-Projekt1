@@ -52,6 +52,8 @@ Når en zone "lukkes", bliver data timestamp og tid ude fra zonen lagt på et fe
 def send_debug_info(string):
     lib.c.publish(topic=debugFeed, msg=string)
 
+def get_time():
+    pass
 
 while True:
     if lib.c.is_conn_issue():
@@ -66,27 +68,16 @@ while True:
             print("Not Running")
             running = False
         while running:
-            #t.start_new_thread(lib.c.publish(),(mapFeed,gpsfunk.gps_funk(False),False,0))
-
-            lib.c.publish(topic=mapFeed, msg=gpsfunk.gps_funk(False))
-            #print(gpsfunk.gps_funk(True))
-            #DON'T DELETE
-            lib.c.publish(topic=indicatorFeed, msg=str(gpsfunk.gps_funk(True)))
-            #t.start_new_thread(lib.c.publish(),(indicatorFeed,str(gpsfunk.gps_funk(True),False,0)))
+            t.start_new_thread(lib.c.publish,(mapFeed,gpsfunk.gps_funk(False)))
+            #lib.c.publish(topic=mapFeed, msg=gpsfunk.gps_funk(False))
+            
             #lib.c.publish(topic=indicatorFeed, msg=str(gpsfunk.gps_funk(True)))
-
+            t.start_new_thread(lib.c.publish,(indicatorFeed,str(gpsfunk.gps_funk(True))))
+            
             #Gyroskop
             #imu = MPU6050(SoftI2C(scl=Pin(22), sda=Pin(21)))
-
             #print(imu.mag.xyz)
-
-            #INDSAMLER MAGNETOMETER DATA OG RETURNER HEADING I GRADER
-            sensor = hmc5883l.HMC5883L(scl=22,sda=21)
-            x,y,z = sensor.read()
-            print(sensor.format_result(x,y,z))
-
-
-            
+                        
             lib.c.check_msg()
             lib.c.send_queue()
             if lib.besked == "0":

@@ -1,5 +1,6 @@
 #import haversine
 #import math
+import hmc5883l
 
 class Zone:
     """Class for hver enkelte zone"""
@@ -18,6 +19,12 @@ class Zone:
         self.borders = borders
         #print(borders)
         return borders
+    
+    def get_heading(self):
+        #INDSAMLER MAGNETOMETER DATA OG RETURNER HEADING I GRADER
+        sensor = hmc5883l.HMC5883L(scl=22,sda=21)
+        x,y,z = sensor.read()
+        print(sensor.format_result(x,y,z))
     
     """ def rotate_zone(self, origin, points, angle):
         
@@ -47,13 +54,7 @@ class Player:
         self.pos = [lat,lon]
 
 
-#zone1 = Zone([1,9], (7,3))
-#player1 = Player(55.64266121248321, 12.612958544710214)
 
-#nextBorderCal = haversine.makeZone(player1.pos,5,10)
-
-#Længde og breddegrader for zone
-#Zone.calculate_borders(Zone, nextBorderCal[0],nextBorderCal[1])
 
 
 

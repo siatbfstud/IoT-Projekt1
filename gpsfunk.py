@@ -1,4 +1,5 @@
 from machine import UART
+from time import sleep
 from micropyGPS import MicropyGPS
 import geofence, PlayerClass
 
@@ -51,10 +52,12 @@ def gps_funk(testZone:bool):
             print('latitude:', gps.latitude[0])
             print('longitude:', gps.longitude[0])
             #geofence.testzone(gps.latitude[0], gps.longitude[0])
+            sleep(5)
             return gps_ada
 
         if testZone == True:
             #print(player.lat,player.lon)
+            sleep(5)
             return int(geofence.testzone(player.lat,player.lon))
 
 

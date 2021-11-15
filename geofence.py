@@ -1,10 +1,9 @@
 import picket
-import gpsfunk
 import haversine
 import PlayerClass
 import led_ring_controller
 from machine import Pin
-import _thread as t 
+
 
 vib = Pin(19, Pin.OUT, value = 0)
 
