@@ -14,10 +14,10 @@ def zone_setup(lat,lon):
     tempZone = PlayerClass.Zone(mkzoneRes[0], mkzoneRes[1])
     borders = tempZone.calculate_borders(tempZone.nwBorder, tempZone.seBorder)
     #Sæt 100 til hvad zonen skal drejes
-    rotatedBorders = tempZone.rotate_zone([lat,lon], borders, 100)
+    #rotatedBorders = tempZone.rotate_zone([lat,lon], borders, 100)
 
     for i in range(4):
-        my_fence.add_point(rotatedBorders[i])
+        my_fence.add_point(borders)
 
 
     #print(my_fence.points)

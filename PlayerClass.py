@@ -1,5 +1,5 @@
-import haversine
-import math
+#import haversine
+#import math
 
 class Zone:
     """Class for hver enkelte zone"""
@@ -19,12 +19,12 @@ class Zone:
         #print(borders)
         return borders
     
-    def rotate_zone(self, origin, points, angle):
-        """
+    """ def rotate_zone(self, origin, points, angle):
+        
         Rotate a point counterclockwise by a given angle around a given origin.
 
         The angle should be given in degrees.
-        """
+       
         angle = math.radians(angle)
         ox, oy = origin
         
@@ -35,15 +35,7 @@ class Zone:
             qy = oy + math.sin(angle) * (i[0] - ox) + math.cos(angle) * (i[1] - oy)
             newPoints.append([qx,qy])
 
-        return newPoints  
-        
-        """ rad = math.radians(angle)
-        c, s = math.cos(rad), math.sin(rad)
-        result = []
-        for x,y in self.borders:
-            result.append([c*x-y*s, x*s+y*c])
-        print("Rotated before conversion",result)
-        return result """
+        return newPoints """  
     
 
 
