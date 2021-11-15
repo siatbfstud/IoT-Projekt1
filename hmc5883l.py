@@ -83,4 +83,5 @@ class HMC5883L:
 
     def format_result(self, x, y, z):
         degrees, minutes = self.heading(x, y)
-        return 'X: {:.4f}, Y: {:.4f}, Z: {:.4f}, Heading: {}° {}′ '.format(x, y, z, degrees, minutes)
+        return degrees
+        #return 'X: {:.4f}, Y: {:.4f}, Z: {:.4f}, Heading: {}° {}′ '.format(x, y, z, degrees, minutes)

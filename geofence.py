@@ -4,6 +4,7 @@ import haversine
 import PlayerClass
 import led_ring_controller
 from machine import Pin
+import _thread as t 
 
 vib = Pin(19, Pin.OUT, value = 0)
 
@@ -15,9 +16,20 @@ def zone_setup(lat,lon):
     borders = tempZone.calculate_borders(tempZone.nwBorder, tempZone.seBorder)
     #Sæt 100 til hvad zonen skal drejes
     #rotatedBorders = tempZone.rotate_zone([lat,lon], borders, 100)
+    
+    #my_fence.add_point((55.706677, 12.538627))
+    #my_fence.add_point((55.706165, 12.538455))
+    #my_fence.add_point((55.705993, 12.540409))
+    #my_fence.add_point((55.706570, 12.540522))
 
-    for i in range(4):
-        my_fence.add_point(borders)
+    my_fence.add_point((55.707020, 12.537976))
+    my_fence.add_point((55.707026, 12.537022))
+    my_fence.add_point((55.707507, 12.537038))
+    my_fence.add_point((55.707581, 12.538344))
+
+
+"""     for i in range(4):
+        my_fence.add_point(borders) """
 
 
     #print(my_fence.points)
@@ -48,9 +60,9 @@ def testzone(lat, lon):
     else:
         print("Ude af zonen")
         #THREAD THIS
-        led_ring_controller.bounce(200,0,0,100)
+        led_ring_controller.bounce(50,0,0,100)
+        print("after LED call")
         #Vibrator
         vib.value(1)
-        main.send_debug_info("Ude i zonen")
-       
+        main.send_debug_info("Ude af zonen")
         return False

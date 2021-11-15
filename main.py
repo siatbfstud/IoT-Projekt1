@@ -2,6 +2,9 @@ import umqtt_robust2, gpsfunk, mpu6050, geofence, led_ring_controller
 from machine import Pin, SoftI2C
 from imu import MPU6050
 from time import sleep
+import hmc5883l
+import _thread as t
+
 
 vib = Pin(19, Pin.OUT, value = 0)
 lib = umqtt_robust2
@@ -63,15 +66,25 @@ while True:
             print("Not Running")
             running = False
         while running:
+            #t.start_new_thread(lib.c.publish(),(mapFeed,gpsfunk.gps_funk(False),False,0))
+
             lib.c.publish(topic=mapFeed, msg=gpsfunk.gps_funk(False))
             #print(gpsfunk.gps_funk(True))
             #DON'T DELETE
             lib.c.publish(topic=indicatorFeed, msg=str(gpsfunk.gps_funk(True)))
+            #t.start_new_thread(lib.c.publish(),(indicatorFeed,str(gpsfunk.gps_funk(True),False,0)))
+            #lib.c.publish(topic=indicatorFeed, msg=str(gpsfunk.gps_funk(True)))
 
             #Gyroskop
             #imu = MPU6050(SoftI2C(scl=Pin(22), sda=Pin(21)))
 
             #print(imu.mag.xyz)
+
+            #INDSAMLER MAGNETOMETER DATA OG RETURNER HEADING I GRADER
+            sensor = hmc5883l.HMC5883L(scl=22,sda=21)
+            x,y,z = sensor.read()
+            print(sensor.format_result(x,y,z))
+
 
             
             lib.c.check_msg()
@@ -83,7 +96,9 @@ while True:
 
     except KeyboardInterrupt:
         lib.c.publish(topic=indicatorFeed, msg="0")
+        lib.c.publish(topic=toggleFeed, msg="0")
         print('Ctrl-C pressed...exiting')
+        vib.value(0)
         sleep(3)
         led_ring_controller.clear()
         lib.c.disconnect()

@@ -17,14 +17,13 @@ def bounce(r, g, b, wait):
         np[i] = (r,g,b)
         np[i-1] = (r,g,b)
         np[i-2] = (r,g,b)
-        
         np.write()
         sleep_ms(wait)
         clear()
-    bounce(200,0,0,100)    
-    
+    #bounce(r,g,b,wait)   
 
 def clear():
     for i in range(n):
         np[i] = (0, 0, 0)
-        np.write() 
+        np.write()
+

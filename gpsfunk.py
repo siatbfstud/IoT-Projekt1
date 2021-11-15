@@ -2,6 +2,7 @@ from machine import UART
 from micropyGPS import MicropyGPS
 import geofence, PlayerClass
 
+
 player = PlayerClass.Player(0,0)
 
 
