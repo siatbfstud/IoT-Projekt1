@@ -59,7 +59,9 @@ def testzone(lat, lon):
     else:
         print("Ude af zonen")
         #THREAD THIS
-        led_ring_controller.bounce(50,0,0,100)
+        
+        led_ring_controller.color(50,0,0)
+        #led_ring_controller.bounce(50,0,0,100)
         print("after LED call")
         #Vibrator
         vib.value(1)

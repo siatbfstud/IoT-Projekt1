@@ -1,8 +1,9 @@
 import umqtt_robust2, gpsfunk, geofence, led_ring_controller
 from machine import Pin, SoftI2C
-from time import sleep
+from time import gmtime, localtime, sleep
 import hmc5883l
 import _thread as t
+import ntptime
 
 
 vib = Pin(19, Pin.OUT, value = 0)
@@ -13,6 +14,8 @@ toggleFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'bot_sub/csv'), 'utf-8')
 debugFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.debug/csv'), 'utf-8')
 
 running = False
+
+ntptime.settime()
 
 """ 
 
@@ -28,6 +31,7 @@ Send 0 til indikator ADA, ved slut DONE
 
 Vesten bliver taget på og er ikke tændt selvom den er sluttet til strøm. DONE
 
+HVIS VI HAVDE MERE TID:
  - Self generated zones uden knap - 
     Spilleren stiller sig i midten af den zone han skal spille i og vender sig mod et mål.
     Træner/hjælpetræner kan på adafruit vælge zonens bredde og længde som bliver genereret ud fra spillerens position og retning og aktiverer den. 
@@ -51,7 +55,7 @@ def send_debug_info(string):
     lib.c.publish(topic=debugFeed, msg=string)
 
 def get_time():
-    pass
+    print(localtime())
 
 while True:
     if lib.c.is_conn_issue():
@@ -66,6 +70,9 @@ while True:
             print("Not Running")
             running = False
         while running:
+            
+            get_time()
+
             t.start_new_thread(lib.c.publish,(mapFeed,gpsfunk.gps_funk(False)))
             #lib.c.publish(topic=mapFeed, msg=gpsfunk.gps_funk(False))
             
@@ -75,7 +82,7 @@ while True:
             #Gyroskop
             #imu = MPU6050(SoftI2C(scl=Pin(22), sda=Pin(21)))
             #print(imu.mag.xyz)
-                        
+            
             lib.c.check_msg()
             lib.c.send_queue()
             if lib.besked == "0":

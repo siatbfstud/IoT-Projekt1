@@ -15,13 +15,13 @@ def color(r, g, b):
 def bounce(r, g, b, wait):
     #while on:
     for i in range(n):
+        print("Loop",i)
         np[i] = (r,g,b)
         np[i-1] = (r,g,b)
         np[i-2] = (r,g,b)
         np.write()
         sleep_ms(wait)
-        clear()
-  
+        clear() 
 
 def clear():
     for i in range(n):

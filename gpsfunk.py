@@ -57,7 +57,7 @@ def gps_funk(testZone:bool):
 
         if testZone == True:
             #print(player.lat,player.lon)
-            sleep(5)
+            sleep(2)
             return int(geofence.testzone(player.lat,player.lon))
 
 
