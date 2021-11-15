@@ -3,7 +3,7 @@ import haversine
 import PlayerClass
 import led_ring_controller
 from machine import Pin
-
+import _thread as t
 
 vib = Pin(19, Pin.OUT, value = 0)
 
@@ -60,7 +60,7 @@ def testzone(lat, lon):
         print("Ude af zonen")
         #THREAD THIS
         
-        led_ring_controller.color(50,0,0)
+        t.start_new_thread(led_ring_controller.color,(50,0,0))
         #led_ring_controller.bounce(50,0,0,100)
         print("after LED call")
         #Vibrator

@@ -55,7 +55,7 @@ def send_debug_info(string):
     lib.c.publish(topic=debugFeed, msg=string)
 
 def get_time():
-    print(localtime())
+    return localtime()
 
 while True:
     if lib.c.is_conn_issue():
@@ -76,8 +76,8 @@ while True:
             t.start_new_thread(lib.c.publish,(mapFeed,gpsfunk.gps_funk(False)))
             #lib.c.publish(topic=mapFeed, msg=gpsfunk.gps_funk(False))
             
-            #lib.c.publish(topic=indicatorFeed, msg=str(gpsfunk.gps_funk(True)))
-            t.start_new_thread(lib.c.publish,(indicatorFeed,str(gpsfunk.gps_funk(True))))
+            lib.c.publish(topic=indicatorFeed, msg=str(gpsfunk.gps_funk(True)))
+            #t.start_new_thread(lib.c.publish,(indicatorFeed,str(gpsfunk.gps_funk(True))))
             
             #Gyroskop
             #imu = MPU6050(SoftI2C(scl=Pin(22), sda=Pin(21)))
