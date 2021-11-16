@@ -1,35 +1,3 @@
-""" 
-Filer vi skal kende:
-boot.py
-main.py
-geofence.py
-gpfunk.py
-haversine.py
-led_ring_controller.py
-PlayerClass.py
-
-
-TO DO
-Tænd LED ring når spiller forlader zone
-Ude af zone starttid til graf og tid brugt ude
-
-Processen:
- - Self generated zones uden knap - 
-    Spilleren stiller sig i midten af den zone han skal spille i og vender sig mod et mål.
-    Træner/hjælpetræner kan på adafruit vælge zonens bredde og længde som bliver genereret ud fra spillerens position og retning og aktiverer den. 
-    Træneren vælger på adafruit når zonen skal være inaktiv og træningen er ovre
-
-
- - Pre defined zones med knap - 
-    Spilleren stiller sig et sted i sin zone der er defineret og valgt i adafruit. 
-    Når spilleren er ude af zonen bliver data sendt til adafruit med tidspunkter.
-    
-
-Når spilleren er ude fra zonen, bouncer LED-ring rødt og vibrator tænder. 
-Samtidig ændrer Zone-indicatoren på adafruit til rød og et timestamp, samt hvor lang tid personen var ude af zonen sendt til adafruit.
-
-Når en zone "lukkes", bliver data timestamp og tid ude fra zonen lagt på et feed som spilleren kan se efter træning.
-"""
 import umqtt_robust2, gpsfunk, led_ring_controller
 from machine import Pin
 from time import gmtime, localtime, sleep
@@ -102,3 +70,36 @@ while True:
     lib.c.send_queue()
 
 lib.c.disconnect()
+
+""" 
+Filer vi skal kende:
+boot.py
+main.py
+geofence.py
+gpfunk.py
+haversine.py
+led_ring_controller.py
+PlayerClass.py
+
+
+TO DO
+Tænd LED ring når spiller forlader zone
+Ude af zone starttid til graf og tid brugt ude
+
+Processen:
+ - Self generated zones uden knap - 
+    Spilleren stiller sig i midten af den zone han skal spille i og vender sig mod et mål.
+    Træner/hjælpetræner kan på adafruit vælge zonens bredde og længde som bliver genereret ud fra spillerens position og retning og aktiverer den. 
+    Træneren vælger på adafruit når zonen skal være inaktiv og træningen er ovre
+
+
+ - Pre defined zones med knap - 
+    Spilleren stiller sig et sted i sin zone der er defineret og valgt i adafruit. 
+    Når spilleren er ude af zonen bliver data sendt til adafruit med tidspunkter.
+    
+
+Når spilleren er ude fra zonen, bouncer LED-ring rødt og vibrator tænder. 
+Samtidig ændrer Zone-indicatoren på adafruit til rød og et timestamp, samt hvor lang tid personen var ude af zonen sendt til adafruit.
+
+Når en zone "lukkes", bliver data timestamp og tid ude fra zonen lagt på et feed som spilleren kan se efter træning.
+"""

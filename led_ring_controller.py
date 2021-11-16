@@ -28,4 +28,4 @@ def clear():
 
 #Test til LED-ring
 #bounce(250, 250, 250, 1000)
-#color(50,0,0)
+color(50,0,0)
