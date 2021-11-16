@@ -13,9 +13,7 @@ def color(r, g, b):
 
 
 def bounce(r, g, b, wait):
-    #while on:
     for i in range(n):
-        print("Loop",i)
         np[i] = (r,g,b)
         np[i-1] = (r,g,b)
         np[i-2] = (r,g,b)
@@ -28,3 +26,6 @@ def clear():
         np[i] = (0, 0, 0)
         np.write()
 
+#Test til LED-ring
+#bounce(250, 250, 250, 1000)
+#color(50,0,0)

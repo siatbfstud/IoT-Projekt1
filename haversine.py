@@ -9,7 +9,7 @@ def main():
 meterPerDeg = 0.0000089
 
 def havDist(lat1, lon1, lat2, lon2):
-    R = 6371 #Radius of the earth in km
+    R = 6371 
     rLat = deg2rad(lat2-lat1)
     rLon = deg2rad(lon2-lon1)
     a = math.sin(rLat/2) * math.sin(rLat/2) + math.cos(deg2rad(lat1)) * math.cos(deg2rad(lat2)) * math.sin(rLon/2) * math.sin(rLon/2)
@@ -20,8 +20,7 @@ def havDist(lat1, lon1, lat2, lon2):
 def deg2rad(deg):
     return deg * (math.pi/180)
 
-
-# MANGLER AT LAVE ZONE UD FRA DIRECTION, BRUG GYROSKOP
+#Skal laves med magnetometer
 def makeZone(playerPos,x,y):
     """X og Y er bredde og længde på kassen"""
     negResult = []

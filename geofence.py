@@ -13,8 +13,6 @@ def zone_setup(lat,lon):
     mkzoneRes = haversine.makeZone([lat,lon],8,2)
     tempZone = PlayerClass.Zone(mkzoneRes[0], mkzoneRes[1])
     borders = tempZone.calculate_borders(tempZone.nwBorder, tempZone.seBorder)
-    #Sæt 100 til hvad zonen skal drejes
-    #rotatedBorders = tempZone.rotate_zone([lat,lon], borders, 100)
     
     #my_fence.add_point((55.706677, 12.538627))
     #my_fence.add_point((55.706165, 12.538455))
@@ -26,12 +24,6 @@ def zone_setup(lat,lon):
     my_fence.add_point((55.707507, 12.537038))
     my_fence.add_point((55.707581, 12.538344))
 
-
-"""     for i in range(4):
-        my_fence.add_point(borders) """
-
-
-    #print(my_fence.points)
 
 def testzone(lat, lon):
     import main
@@ -59,11 +51,9 @@ def testzone(lat, lon):
     else:
         print("Ude af zonen")
         #THREAD THIS
-        
-        t.start_new_thread(led_ring_controller.color,(50,0,0))
+        #t.start_new_thread(led_ring_controller.bounce,(50,0,0,100))
         #led_ring_controller.bounce(50,0,0,100)
         print("after LED call")
-        #Vibrator
         vib.value(1)
         main.send_debug_info("Ude af zonen")
         return False

@@ -26,6 +26,8 @@ class Zone:
         x,y,z = sensor.read()
         print(sensor.format_result(x,y,z))
     
+
+    #Skal nok ikke bruges
     """ def rotate_zone(self, origin, points, angle):
         
         Rotate a point counterclockwise by a given angle around a given origin.
