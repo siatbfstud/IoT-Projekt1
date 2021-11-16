@@ -27,7 +27,7 @@ class Zone:
         print(sensor.format_result(x,y,z))
     
 
-    #Skal nok ikke bruges
+    #Funktion vi ville bruge, hvis vi havde tid og teori til at udregne koordinater på kloden. Den ville så roterer vores zonerne til hver enkelte stadion.
     """ def rotate_zone(self, origin, points, angle):
         
         Rotate a point counterclockwise by a given angle around a given origin.
@@ -45,8 +45,6 @@ class Zone:
             newPoints.append([qx,qy])
 
         return newPoints """  
-    
-
 
 class Player:
     """Class for hver spiller/GPS enhed"""

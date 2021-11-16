@@ -4,9 +4,10 @@ from time import gmtime, localtime, sleep
 import _thread as t
 import ntptime
 
-
 vib = Pin(19, Pin.OUT, value = 0)
 lib = umqtt_robust2
+
+#Forskellige feeds til Adafruit IO
 mapFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.map/csv'), 'utf-8')
 indicatorFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.indicator/csv'), 'utf-8')
 toggleFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'bot_sub/csv'), 'utf-8')
@@ -14,14 +15,18 @@ debugFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.debug/csv'), 'ut
 
 running = False
 
+#Sætter RTC på ESP32 til nuværende tid, trukket fra en pool på nettet. (pool.ntp.org)
 ntptime.settime()
 
+#Sender data til Adafruit, så man kan debug uden en terminal på PC'en
 def send_debug_info(string):
     lib.c.publish(topic=debugFeed, msg=string)
 
+#Return nuværende tidspunkt i en tuple
 def get_time():
     return localtime()
 
+#Main loop
 while True:
     if lib.c.is_conn_issue():
         while lib.c.is_conn_issue():
@@ -39,8 +44,9 @@ while True:
             #t.start_new_thread(led_ring_controller.bounce,(50,0,0,100))
             get_time()
             
+            #Starter en thread til at opdatere GPS data'en
             t.start_new_thread(lib.c.publish,(mapFeed,gpsfunk.gps_funk(False)))
-
+            #Starter en thread for at tjekke om spilleren er inde for zonen. SKAL THREADES ANDERLEDES, LED LOOP SKAL HAVE EGEN THREAD.
             t.start_new_thread(lib.c.publish,(indicatorFeed,str(gpsfunk.gps_funk(True))))
             
             lib.c.check_msg()
@@ -51,6 +57,7 @@ while True:
         sleep(2) 
 
     except KeyboardInterrupt:
+        #Reset alle komponeneter og alt på adafruit når main loop lukkes
         lib.c.publish(topic=indicatorFeed, msg="0")
         lib.c.publish(topic=toggleFeed, msg="0")
         print('Ctrl-C pressed...exiting')

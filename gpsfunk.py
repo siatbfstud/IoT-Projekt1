@@ -27,13 +27,14 @@ def gps_funk(testZone:bool):
 
         
         gps_ada = formattedSpd+","+formattedLat+","+formattedLon+","+formattedAlt
-
+        
         if gps.latitude[0] != 0.0 and testZone == False:
             
             player.lat = gps.latitude[0]
             player.lon = gps.longitude[0]
 
             """RUN ONCE PLS FIX"""
+            #RETURN GPS FUNK TIL MAIN; OG KØR ZONE SETUP DERFRA
             geofence.zone_setup(player.lat,player.lon)
 
 
