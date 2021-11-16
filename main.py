@@ -12,15 +12,19 @@ mapFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.map/csv'), 'utf-8'
 indicatorFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.indicator/csv'), 'utf-8')
 toggleFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'bot_sub/csv'), 'utf-8')
 debugFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.debug/csv'), 'utf-8')
+dataFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.data/csv'), 'utf-8')
 
 running = False
 
 #Sætter RTC på ESP32 til nuværende tid, trukket fra en pool på nettet. (pool.ntp.org)
-ntptime.settime()
+#ntptime.settime()
 
-#Sender data til Adafruit, så man kan debug uden en terminal på PC'en
+#Sender data til Adafruit, så man kan debug og sende data uden en terminal på PC'en
 def send_debug_info(string):
     lib.c.publish(topic=debugFeed, msg=string)
+
+def send_data_info(string):
+    lib.c.publish(topic=dataFeed, msg=string)
 
 #Return nuværende tidspunkt i en tuple
 def get_time():
@@ -45,7 +49,7 @@ while True:
             get_time()
             
             #Starter en thread til at opdatere GPS data'en
-            t.start_new_thread(lib.c.publish,(mapFeed,gpsfunk.gps_funk(False)))
+            lib.c.publish,(mapFeed,gpsfunk.gps_funk(False))
             #Starter en thread for at tjekke om spilleren er inde for zonen. SKAL THREADES ANDERLEDES, LED LOOP SKAL HAVE EGEN THREAD.
             t.start_new_thread(lib.c.publish,(indicatorFeed,str(gpsfunk.gps_funk(True))))
             

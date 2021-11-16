@@ -16,11 +16,14 @@ def zone_setup(lat,lon):
     newZone = PlayerClass.Zone(newZone[0], newZone[1])
     newZoneBorders = newZone.calculate_borders(newZone.nwBorder, newZone.seBorder)
     
+    #Inde i zonen
     #my_fence.add_point((55.706677, 12.538627))
     #my_fence.add_point((55.706165, 12.538455))
     #my_fence.add_point((55.705993, 12.540409))
     #my_fence.add_point((55.706570, 12.540522))
 
+
+    #Ude af zonen
     my_fence.add_point((55.707020, 12.537976))
     my_fence.add_point((55.707026, 12.537022))
     my_fence.add_point((55.707507, 12.537038))
@@ -29,21 +32,11 @@ def zone_setup(lat,lon):
 
 def testzone(lat, lon):
     import main
-    #Inde i zone
-    #my_fence.add_point((55.706677, 12.538627))
-    #my_fence.add_point((55.706165, 12.538455))
-    #my_fence.add_point((55.705993, 12.540409))
-    #my_fence.add_point((55.706570, 12.540522))
-
-    #Ude af zone
-    #my_fence.add_point((55.707020, 12.537976))
-    #my_fence.add_point((55.707026, 12.537022))
-    #my_fence.add_point((55.707507, 12.537038))
-    #my_fence.add_point((55.707581, 12.538344))
 
     #Hvis spillerene er inde for zonen
     if my_fence.check_point((lat, lon)) == True:
         print("Inde i zonen")
+        main.send_data_info("0")
         main.send_debug_info("Inde i zonen")
         led_ring_controller.clear()
         vib.value(0)
@@ -51,10 +44,9 @@ def testzone(lat, lon):
     #Hvis spilleren er ude for zonen
     else:
         print("Ude af zonen")
-        #THREAD THIS
         #t.start_new_thread(led_ring_controller.bounce,(50,0,0,100))
-        #led_ring_controller.bounce(50,0,0,100)
         print("after LED call")
         vib.value(1)
+        main.send_data_info("1")
         main.send_debug_info("Ude af zonen")
         return False
