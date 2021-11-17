@@ -51,7 +51,7 @@ while True:
             #Starter en thread til at opdatere GPS data'en
             lib.c.publish,(mapFeed,gpsfunk.gps_funk(False))
             #Starter en thread for at tjekke om spilleren er inde for zonen. SKAL THREADES ANDERLEDES, LED LOOP SKAL HAVE EGEN THREAD.
-            t.start_new_thread(lib.c.publish,(indicatorFeed,str(gpsfunk.gps_funk(True))))
+            lib.c.publish,(indicatorFeed,str(gpsfunk.gps_funk(True)))
             
             lib.c.check_msg()
             lib.c.send_queue()
