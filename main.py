@@ -19,7 +19,6 @@ zonePickerFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.zonepicket/
 global running
 running = False
 
-gps_ada = str
 #Sætter RTC på ESP32 til nuværende tid, trukket fra en pool på nettet. (pool.ntp.org)
 #ntptime.settime()
 
@@ -38,29 +37,29 @@ def get_time():
     return localtime()
 
 def thread_GPS(): 
-    gps_ada = gps_funk()
-    #Publisher til adafruit map
-    lib.c.publish(mapFeed,gps_ada)
+    try:
+        global gps_ada
+        gps_ada = gps_funk()
+        #Publisher til adafruit map
+        lib.c.publish(mapFeed,gps_ada)
+    except ValueError:
+        t.exit()
 
 def thread_indicator():
-    sleep(5)
-    #Formater gps data
-    
-    latLon = gps_ada
-    latLon = latLon.rsplit(",")
-    del latLon[0]
-    del latLon[-1]
-    print(latLon)
-    #Tjekker hvad indikator value er 
-    indicatorBool = int(geofence.testzone(float(latLon[0]),float(latLon[1])))
-    #Starter en thread for at tjekke om spilleren er inde for zonen. SKAL THREADES ANDERLEDES, LED LOOP SKAL HAVE EGEN THREAD.
-    lib.c.publish(indicatorFeed,str(indicatorBool))
-
-
-def start_threads():
-    t.start_new_thread(thread_GPS,())
-    t.start_new_thread(thread_indicator,())
-    
+    try:
+        sleep(10)
+        #Formater gps data
+        latLon = gps_ada
+        latLon = latLon.rsplit(",")
+        del latLon[0]
+        del latLon[-1]
+        print(latLon)
+        #Tjekker hvad indikator value er 
+        indicatorBool = int(geofence.testzone(float(latLon[0]),float(latLon[1])))
+        #Starter en thread for at tjekke om spilleren er inde for zonen. SKAL THREADES ANDERLEDES, LED LOOP SKAL HAVE EGEN THREAD.
+        lib.c.publish(indicatorFeed,str(indicatorBool))
+    except ValueError:
+        t.exit()
 
 #Main loop
 while True:
@@ -73,6 +72,8 @@ while True:
     try:
         if lib.besked == "1":
             running = True
+            t.start_new_thread(thread_GPS,())
+            t.start_new_thread(thread_indicator,())
         else:
             print("Not Running")
             running = False
@@ -80,10 +81,6 @@ while True:
             #Test til LED-ring
             #t.start_new_thread(led_ring_controller.bounce,(50,0,0,100))
             get_time()
-            if counter < 1:
-                start_threads()
-                counter += 1
-
 
             #gps_ada = t.start_new_thread(gpsfunk.gps_funk,(False))
             #gps_ada = gpsfunk.gps_funk()
