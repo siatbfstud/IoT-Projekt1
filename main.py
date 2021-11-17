@@ -1,8 +1,9 @@
-import umqtt_robust2, gpsfunk, led_ring_controller
+import umqtt_robust2, led_ring_controller, geofence
 from machine import Pin
 from time import gmtime, localtime, sleep
 import _thread as t
 import ntptime
+from gpsfunk import gps_funk
 
 vib = Pin(19, Pin.OUT, value = 0)
 lib = umqtt_robust2
@@ -14,10 +15,14 @@ toggleFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'bot_sub/csv'), 'utf-8')
 debugFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.debug/csv'), 'utf-8')
 dataFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.data/csv'), 'utf-8')
 
+global running
 running = False
 
+gps_ada = str
 #Sætter RTC på ESP32 til nuværende tid, trukket fra en pool på nettet. (pool.ntp.org)
 #ntptime.settime()
+
+
 
 #Sender data til Adafruit, så man kan debug og sende data uden en terminal på PC'en
 def send_debug_info(string):
@@ -26,12 +31,39 @@ def send_debug_info(string):
 def send_data_info(string):
     lib.c.publish(topic=dataFeed, msg=string)
 
+
 #Return nuværende tidspunkt i en tuple
 def get_time():
     return localtime()
 
+def thread_GPS(): 
+    gps_ada = gps_funk()
+    #Publisher til adafruit map
+    lib.c.publish(mapFeed,gps_ada)
+
+def thread_indicator():
+    sleep(5)
+    #Formater gps data
+    
+    latLon = gps_ada
+    latLon = latLon.rsplit(",")
+    del latLon[0]
+    del latLon[-1]
+    print(latLon)
+    #Tjekker hvad indikator value er 
+    indicatorBool = int(geofence.testzone(float(latLon[0]),float(latLon[1])))
+    #Starter en thread for at tjekke om spilleren er inde for zonen. SKAL THREADES ANDERLEDES, LED LOOP SKAL HAVE EGEN THREAD.
+    lib.c.publish(indicatorFeed,str(indicatorBool))
+
+
+def start_threads():
+    t.start_new_thread(thread_GPS,())
+    t.start_new_thread(thread_indicator,())
+    
+
 #Main loop
 while True:
+    counter = 0
     if lib.c.is_conn_issue():
         while lib.c.is_conn_issue():
             lib.c.reconnect()
@@ -43,15 +75,29 @@ while True:
         else:
             print("Not Running")
             running = False
-        while running:
+        if running:
             #Test til LED-ring
             #t.start_new_thread(led_ring_controller.bounce,(50,0,0,100))
             get_time()
+            if counter < 1:
+                start_threads()
+                counter += 1
+
+
+            #gps_ada = t.start_new_thread(gpsfunk.gps_funk,(False))
+            #gps_ada = gpsfunk.gps_funk()
             
-            #Starter en thread til at opdatere GPS data'en
-            lib.c.publish,(mapFeed,gpsfunk.gps_funk(False))
-            #Starter en thread for at tjekke om spilleren er inde for zonen. SKAL THREADES ANDERLEDES, LED LOOP SKAL HAVE EGEN THREAD.
-            lib.c.publish,(indicatorFeed,str(gpsfunk.gps_funk(True)))
+            
+
+
+            #Set up zones med gamle metode
+            #geofence.zone_setup(float(latLon[0]),float(latLon[1]))
+
+            
+
+            #Publisher til adafruit map
+            #lib.c.publish(mapFeed,gps_ada)
+            
             
             lib.c.check_msg()
             lib.c.send_queue()
@@ -81,6 +127,10 @@ while True:
     lib.c.send_queue()
 
 lib.c.disconnect()
+
+
+if "__name__" == "__main__":
+    main()
 
 """ 
 Filer vi skal kende:

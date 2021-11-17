@@ -9,12 +9,14 @@ vib = Pin(19, Pin.OUT, value = 0)
 
 my_fence = picket.Fence()
 
-def zone_setup(lat,lon):
+def zone_setup(lat:float,lon:float):
     #Disse tre linjer skaber 2 af de 4 hjørner, i koordinater, til en zone, putter dem i en Zone Class.
     #Tredje linje udregner de resterende hjørner, og kan derefter bruges af picket
     newZone = haversine.makeZone([lat,lon],8,2)
     newZone = PlayerClass.Zone(newZone[0], newZone[1])
     newZoneBorders = newZone.calculate_borders(newZone.nwBorder, newZone.seBorder)
+    #Finder heading fra magnetometer
+    newZone.get_heading()
     
     #Inde i zonen
     #my_fence.add_point((55.706677, 12.538627))
