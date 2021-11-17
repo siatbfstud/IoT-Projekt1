@@ -13,6 +13,7 @@ indicatorFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.indicator/cs
 toggleFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'bot_sub/csv'), 'utf-8')
 debugFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.debug/csv'), 'utf-8')
 dataFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.data/csv'), 'utf-8')
+zonePickerFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.zonepicket/csv'), 'utf-8')
 
 running = False
 
