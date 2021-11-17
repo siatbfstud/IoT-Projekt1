@@ -21,7 +21,7 @@ running = False
 
 #Sætter RTC på ESP32 til nuværende tid, trukket fra en pool på nettet. (pool.ntp.org)
 #ntptime.settime()
-
+gps_ada = str()
 
 
 #Sender data til Adafruit, så man kan debug og sende data uden en terminal på PC'en
@@ -47,6 +47,7 @@ def thread_GPS():
 
 def thread_indicator():
     try:
+        global gps_ada
         sleep(10)
         #Formater gps data
         latLon = gps_ada
