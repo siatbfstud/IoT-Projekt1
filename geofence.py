@@ -1,6 +1,7 @@
 import picket
 import haversine
 import PlayerClass
+import json, io
 import led_ring_controller
 from machine import Pin
 import _thread as t
@@ -10,6 +11,7 @@ vib = Pin(19, Pin.OUT, value = 0)
 my_fence = picket.Fence()
 
 def zone_setup(lat:float,lon:float):
+    import main
     #Disse tre linjer skaber 2 af de 4 hjørner, i koordinater, til en zone, putter dem i en Zone Class.
     #Tredje linje udregner de resterende hjørner, og kan derefter bruges af picket
     newZone = haversine.makeZone([lat,lon],8,2)
@@ -18,12 +20,10 @@ def zone_setup(lat:float,lon:float):
     #Finder heading fra magnetometer
     newZone.get_heading()
     
-    #Inde i zonen
-    #my_fence.add_point((55.706677, 12.538627))
-    #my_fence.add_point((55.706165, 12.538455))
-    #my_fence.add_point((55.705993, 12.540409))
-    #my_fence.add_point((55.706570, 12.540522))
-
+    if main.lib.c.publish(topic=main.zonePickerFeed, msg="0"):
+        with io.open("zones.json") as o:
+            zone1 = json.loads(o)
+            print(zone1)
 
     #Ude af zonen
     my_fence.add_point((55.707020, 12.537976))
