@@ -32,12 +32,21 @@ if attempt_count == MAX_ATTEMPTS:
     print('could not connect to the WiFi network')
     sys.exit()
 besked = ""
+numBesked = ""
 def sub_cb(topic, msg, retained, duplicate):
     #print((topic, msg, retained, duplicate))
-    m = msg.decode('utf-8')
-    global besked
-    besked = m.lower()
-    print(besked)
+    print(topic,msg)
+    if topic == b'siatbf/feeds/BOT_SUB':
+        m = msg.decode('utf-8')
+        global besked
+        besked = m.lower()
+        print(besked)
+    elif topic == b'siatbf/feeds/numsub':
+        m = msg.decode('utf-8')
+        global numBesked
+        numBesked = m.lower()
+        print(numBesked)
+
 # create a random MQTT clientID
 random_num = int.from_bytes(os.urandom(3), 'little')
 mqtt_client_id = bytes('client_'+str(random_num), 'utf-8')
@@ -72,7 +81,9 @@ c.set_callback(sub_cb)
 
 mqtt_pub_feedname = bytes('{:s}/feeds/{:s}'.format(ADAFRUIT_USERNAME, ADAFRUIT_IO_PUB_FEEDNAME), 'utf-8')
 mqtt_sub_feedname = bytes('{:s}/feeds/{:s}'.format(ADAFRUIT_USERNAME, ADAFRUIT_IO_SUB_FEEDNAME), 'utf-8')
+mqtt_numsub_feedname = bytes('{:s}/feeds/{:s}'.format(ADAFRUIT_USERNAME, "numsub"), 'utf-8')
 if not c.connect(clean_session=False):
     print("New session being set up")
     c.subscribe(mqtt_sub_feedname)
+    c.subscribe(mqtt_numsub_feedname)
 

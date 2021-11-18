@@ -26,7 +26,8 @@ def gps_funk():
         formattedSpd = formattedSpd[:-5]
 
         
-        gps_ada = formattedSpd+","+formattedLat+","+formattedLon+","+formattedAlt
+        #gps_ada = formattedSpd+","+formattedLat+","+formattedLon+","+formattedAlt
+        gps_ada = formattedLat+","+formattedLon
         
         if gps.latitude[0] != 0.0:
             

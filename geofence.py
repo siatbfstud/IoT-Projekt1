@@ -1,7 +1,7 @@
 import picket
 import haversine
 import PlayerClass
-import json, io
+import ujson, uio
 import led_ring_controller
 from machine import Pin
 import _thread as t
@@ -10,26 +10,23 @@ vib = Pin(19, Pin.OUT, value = 0)
 
 my_fence = picket.Fence()
 
-def zone_setup(lat:float,lon:float):
-    import main
+def zone_setup(lat:float,lon:float, nr):
+    #import main
     #Disse tre linjer skaber 2 af de 4 hjørner, i koordinater, til en zone, putter dem i en Zone Class.
     #Tredje linje udregner de resterende hjørner, og kan derefter bruges af picket
-    newZone = haversine.makeZone([lat,lon],8,2)
-    newZone = PlayerClass.Zone(newZone[0], newZone[1])
-    newZoneBorders = newZone.calculate_borders(newZone.nwBorder, newZone.seBorder)
+    #newZone = haversine.makeZone([lat,lon],8,2)
+    #newZone = PlayerClass.Zone(newZone[0], newZone[1])
+    #newZoneBorders = newZone.calculate_borders(newZone.nwBorder, newZone.seBorder)
     #Finder heading fra magnetometer
-    newZone.get_heading()
+    #newZone.get_heading()
     
-    if main.lib.c.publish(topic=main.zonePickerFeed, msg="0"):
-        with io.open("zones.json") as o:
-            zone1 = json.loads(o)
-            print(zone1)
-
-    #Ude af zonen
-    my_fence.add_point((55.707020, 12.537976))
-    my_fence.add_point((55.707026, 12.537022))
-    my_fence.add_point((55.707507, 12.537038))
-    my_fence.add_point((55.707581, 12.538344))
+    with uio.open("zones.json", "r") as o:
+        position = ujson.load(o)
+        zone = position["Zone "+str(nr)]["Position"]
+        for i in zone:
+            my_fence.add_point((float(zone[i][0]), float(zone[i][1])))
+        print(my_fence.list_points())
+    return
 
 
 def testzone(lat, lon):
@@ -46,7 +43,7 @@ def testzone(lat, lon):
     #Hvis spilleren er ude for zonen
     else:
         print("Ude af zonen")
-        #t.start_new_thread(led_ring_controller.bounce,(50,0,0,100))
+        t.start_new_thread(led_ring_controller.bounce,(50,0,0,100))
         print("after LED call")
         vib.value(1)
         main.send_data_info("1")

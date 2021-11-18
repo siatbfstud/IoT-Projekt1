@@ -14,15 +14,14 @@ indicatorFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.indicator/cs
 toggleFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'bot_sub/csv'), 'utf-8')
 debugFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.debug/csv'), 'utf-8')
 dataFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.data/csv'), 'utf-8')
-zonePickerFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.zonepicket/csv'), 'utf-8')
+numsubFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'numsub/csv'), 'utf-8')
 
-global running
-running = False
+
+
 
 #Sætter RTC på ESP32 til nuværende tid, trukket fra en pool på nettet. (pool.ntp.org)
 #ntptime.settime()
 gps_ada = str()
-
 
 #Sender data til Adafruit, så man kan debug og sende data uden en terminal på PC'en
 def send_debug_info(string):
@@ -31,6 +30,12 @@ def send_debug_info(string):
 def send_data_info(string):
     lib.c.publish(topic=dataFeed, msg=string)
 
+""" def format_latLon(gps):
+    #Formater gps data
+    latLon = gps
+    latLon = latLon.rsplit(",")
+    print(latLon[0])
+    return latLon """
 
 #Return nuværende tidspunkt i en tuple
 def get_time():
@@ -39,32 +44,41 @@ def get_time():
 def thread_GPS(): 
     try:
         global gps_ada
+        global latLon
         gps_ada = gps_funk()
+        latLon = gps_ada.rsplit(",")
         #Publisher til adafruit map
-        lib.c.publish(mapFeed,gps_ada)
-    except ValueError:
+        lib.c.publish(mapFeed,"0.0,"+gps_ada+",0.0")
+        sleep(5)
+    except Exception:
+        print("GPS_THREAD DIED")
         t.exit()
 
 def thread_indicator():
     try:
-        global gps_ada
-        sleep(10)
-        #Formater gps data
-        latLon = gps_ada
-        latLon = latLon.rsplit(",")
-        del latLon[0]
-        del latLon[-1]
-        print(latLon)
-        #Tjekker hvad indikator value er 
+        global latLon
+        print (latLon)
+        #Tjekker hvad indikator value er, og publisher til Adafruit
         indicatorBool = int(geofence.testzone(float(latLon[0]),float(latLon[1])))
-        #Starter en thread for at tjekke om spilleren er inde for zonen. SKAL THREADES ANDERLEDES, LED LOOP SKAL HAVE EGEN THREAD.
         lib.c.publish(indicatorFeed,str(indicatorBool))
-    except ValueError:
+        sleep(5)
+    except Exception as e:
+        print("INDICATOR THREAD DIED:", e)
         t.exit()
 
+
+def zone_picker(nr):
+    global latLon
+    geofence.zone_setup(float(latLon[0]), float(latLon[1]),nr)
+    sleep(5)
+    t.start_new_thread(thread_indicator,())
+    
+
+running = False
+global counter
+counter = 0
 #Main loop
 while True:
-    counter = 0
     if lib.c.is_conn_issue():
         while lib.c.is_conn_issue():
             lib.c.reconnect()
@@ -74,34 +88,36 @@ while True:
         if lib.besked == "1":
             running = True
             t.start_new_thread(thread_GPS,())
-            t.start_new_thread(thread_indicator,())
+            sleep(5)
         else:
             print("Not Running")
-            running = False
-        if running:
-            #Test til LED-ring
-            #t.start_new_thread(led_ring_controller.bounce,(50,0,0,100))
-            get_time()
-
-            #gps_ada = t.start_new_thread(gpsfunk.gps_funk,(False))
-            #gps_ada = gpsfunk.gps_funk()
+            #running = False
+        if running is True:
+            get_time()      
             
-            
-
+            zone_picker(1)
 
             #Set up zones med gamle metode
-            #geofence.zone_setup(float(latLon[0]),float(latLon[1]))
-
-            
+            """ if lib.numBesked == "1" and counter == 0:
+                global latLon
+                print("Setting up zone 1")
+                geofence.zone_setup(float(latLon[0]), float(latLon[1]))
+                #t.start_new_thread(thread_indicator,())
+                lib.c.publish(topic=numsubFeed, msg="9")
+                thread_indicator()
+                counter = counter + 1
+                sleep(5) """
 
             #Publisher til adafruit map
             #lib.c.publish(mapFeed,gps_ada)
-            
             
             lib.c.check_msg()
             lib.c.send_queue()
             if lib.besked == "0":
                 running = False
+                vib.value(0)
+                led_ring_controller.clear()
+                lib.c.publish(topic=indicatorFeed, msg="0")
             sleep(2)
         sleep(2) 
 
@@ -128,8 +144,6 @@ while True:
 lib.c.disconnect()
 
 
-if "__name__" == "__main__":
-    main()
 
 """ 
 Filer vi skal kende:
