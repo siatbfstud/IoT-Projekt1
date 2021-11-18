@@ -10,7 +10,7 @@ vib = Pin(19, Pin.OUT, value = 0)
 
 my_fence = picket.Fence()
 
-def zone_setup(lat:float,lon:float, nr):
+def zone_setup(nr, lat:float=0, lon:float=0):
     #import main
     #Disse tre linjer skaber 2 af de 4 hjørner, i koordinater, til en zone, putter dem i en Zone Class.
     #Tredje linje udregner de resterende hjørner, og kan derefter bruges af picket
@@ -43,7 +43,10 @@ def testzone(lat, lon):
     #Hvis spilleren er ude for zonen
     else:
         print("Ude af zonen")
+        main.stopme = True
         t.start_new_thread(led_ring_controller.bounce,(50,0,0,100))
+        main.stopme = False
+        t.start_new_thread(main.thread_GPS,())
         print("after LED call")
         vib.value(1)
         main.send_data_info("1")

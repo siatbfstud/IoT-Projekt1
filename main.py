@@ -17,11 +17,8 @@ dataFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.data/csv'), 'utf-
 numsubFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'numsub/csv'), 'utf-8')
 
 
-
-
 #Sætter RTC på ESP32 til nuværende tid, trukket fra en pool på nettet. (pool.ntp.org)
 #ntptime.settime()
-gps_ada = str()
 
 #Sender data til Adafruit, så man kan debug og sende data uden en terminal på PC'en
 def send_debug_info(string):
@@ -30,18 +27,14 @@ def send_debug_info(string):
 def send_data_info(string):
     lib.c.publish(topic=dataFeed, msg=string)
 
-""" def format_latLon(gps):
-    #Formater gps data
-    latLon = gps
-    latLon = latLon.rsplit(",")
-    print(latLon[0])
-    return latLon """
-
 #Return nuværende tidspunkt i en tuple
 def get_time():
     return localtime()
 
 def thread_GPS(): 
+    global stopme
+    if stopme is True:
+        t.exit()
     try:
         global gps_ada
         global latLon
@@ -50,8 +43,8 @@ def thread_GPS():
         #Publisher til adafruit map
         lib.c.publish(mapFeed,"0.0,"+gps_ada+",0.0")
         sleep(5)
-    except Exception:
-        print("GPS_THREAD DIED")
+    except Exception as e:
+        print("GPS THREAD DIED:", e)
         t.exit()
 
 def thread_indicator():
@@ -66,17 +59,16 @@ def thread_indicator():
         print("INDICATOR THREAD DIED:", e)
         t.exit()
 
-
 def zone_picker(nr):
     global latLon
     geofence.zone_setup(float(latLon[0]), float(latLon[1]),nr)
-    sleep(5)
+    sleep(3)
     t.start_new_thread(thread_indicator,())
-    
+    return
 
+stopme = False
+gps_ada = str()
 running = False
-global counter
-counter = 0
 #Main loop
 while True:
     if lib.c.is_conn_issue():
@@ -91,25 +83,14 @@ while True:
             sleep(5)
         else:
             print("Not Running")
-            #running = False
         if running is True:
             get_time()      
-            
-            zone_picker(1)
+            print("in main loop, numBesked:", lib.numBesked)
 
-            #Set up zones med gamle metode
-            """ if lib.numBesked == "1" and counter == 0:
-                global latLon
-                print("Setting up zone 1")
-                geofence.zone_setup(float(latLon[0]), float(latLon[1]))
-                #t.start_new_thread(thread_indicator,())
-                lib.c.publish(topic=numsubFeed, msg="9")
-                thread_indicator()
-                counter = counter + 1
-                sleep(5) """
-
-            #Publisher til adafruit map
-            #lib.c.publish(mapFeed,gps_ada)
+            if lib.numBesked != "":
+                zone_picker(int(lib.numBesked))
+                lib.numBesked = ""
+                print("Exiting zonepicker if statement")
             
             lib.c.check_msg()
             lib.c.send_queue()
