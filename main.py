@@ -126,6 +126,7 @@ while True:
             sleep(2)
         else:
             print("Not Running")
+            send_debug_info("Not Runnig")
         sleep(5) 
 
     except KeyboardInterrupt:
