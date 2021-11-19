@@ -120,6 +120,8 @@ while True:
             lib.c.send_queue()
             if lib.besked == "0":
                 running = False
+                stopmeIndicator = True
+                stopmeGPS = True
                 vib.value(0)
                 led_ring_controller.clear()
                 lib.c.publish(topic=indicatorFeed, msg="0")
