@@ -59,8 +59,7 @@ def thread_indicator():
         t.exit()
 
 def testzone(lat, lon):
-    global stopmeGPS
-    print("inde i testzone")
+    #global stopmeGPS
     #Hvis spillerene er inde for zonen
     if geofence.my_fence.check_point((lat, lon)) == True:
         print("Inde i zonen")
@@ -105,10 +104,8 @@ while True:
             running = True
             t.start_new_thread(thread_GPS,())
             print("hello")
-            lib.besked = "0.5"
+            lib.besked = ""
             sleep(5)
-        elif lib.besked == "0":
-            print("Not Running")
         if running is True:    
             print("in main loop, numBesked:", lib.numBesked)
 
@@ -127,6 +124,8 @@ while True:
                 led_ring_controller.clear()
                 lib.c.publish(topic=indicatorFeed, msg="0")
             sleep(2)
+        else:
+            print("Not Running")
         sleep(2) 
 
     except KeyboardInterrupt:
@@ -138,7 +137,7 @@ while True:
         print('Ctrl-C pressed...exiting')
         vib.value(0)
         led_ring_controller.clear()
-        sleep(1)
+        sleep(5)
         lib.c.disconnect()
         lib.wifi.active(False)
         lib.sys.exit()
