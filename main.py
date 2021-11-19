@@ -129,7 +129,7 @@ while True:
         else:
             print("Not Running")
             send_debug_info("Not Runnig")
-        sleep(5) 
+        sleep(10) 
 
     except KeyboardInterrupt:
         #Reset alle komponeneter og alt på adafruit når main loop lukkes
