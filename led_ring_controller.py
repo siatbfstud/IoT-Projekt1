@@ -10,9 +10,10 @@ def color(r, g, b):
     for i in range(n):
         np[i] = (r, g, b)
     np.write()
+    return
 
 
-def bounce(r, g, b, wait):
+def bounce(r, g, b, wait):    
     for i in range(12):
         np[i] = (r,g,b)
         np[i-1] = (r,g,b)
@@ -26,6 +27,3 @@ def clear():
     for i in range(n):
         np[i] = (0, 0, 0)
         np.write()
-
-#Test til LED-ring
-#bounce(250, 250, 250, 1000)

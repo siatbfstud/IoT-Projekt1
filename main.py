@@ -59,7 +59,6 @@ def thread_indicator():
         t.exit()
 
 def testzone(lat, lon):
-    #global stopmeGPS
     #Hvis spillerene er inde for zonen
     if geofence.my_fence.check_point((lat, lon)) == True:
         print("Inde i zonen")
