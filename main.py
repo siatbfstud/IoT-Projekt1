@@ -105,13 +105,12 @@ while True:
             t.start_new_thread(thread_GPS,())
             print("hello")
             lib.besked = ""
-            sleep(5)
+            sleep(2)
         if running is True:    
             print("in main loop, numBesked:", lib.numBesked)
-
+            
             if lib.numBesked != "":
                 zone_picker(int(lib.numBesked))
-                print(stopmeIndicator)
                 t.start_new_thread(thread_indicator,())
                 lib.numBesked = ""
                 print("Exiting zonepicker if statement")
@@ -129,7 +128,7 @@ while True:
         else:
             print("Not Running")
             send_debug_info("Not Runnig")
-        sleep(10) 
+        sleep(5) 
 
     except KeyboardInterrupt:
         #Reset alle komponeneter og alt på adafruit når main loop lukkes
