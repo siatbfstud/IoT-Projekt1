@@ -1,5 +1,5 @@
-#import haversine
-#import PlayerClass
+#import zone_udregner
+#import zone_og_player
 import picket, ujson, uio
 
 global my_fence
@@ -9,8 +9,8 @@ def zone_setup(nr, lat:float=0, lon:float=0):
     #import main
     #Disse tre linjer skaber 2 af de 4 hjørner, i koordinater, til en zone, putter dem i en Zone Class.
     #Tredje linje udregner de resterende hjørner, og kan derefter bruges af picket
-    #newZone = haversine.makeZone([lat,lon],8,2)
-    #newZone = PlayerClass.Zone(newZone[0], newZone[1])
+    #newZone = zone_udregner.makeZone([lat,lon],8,2)
+    #newZone = zone_og_player.Zone(newZone[0], newZone[1])
     #newZoneBorders = newZone.calculate_borders(newZone.nwBorder, newZone.seBorder)
     #Finder heading fra magnetometer
     #newZone.get_heading()

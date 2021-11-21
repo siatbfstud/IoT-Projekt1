@@ -1,4 +1,4 @@
-#import haversine
+#import zone_udregner
 #import math
 import hmc5883l
 

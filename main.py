@@ -1,4 +1,4 @@
-import umqtt_robust2, led_ring_controller, geofence
+import umqtt_robust2, led_ring, geofence
 from machine import Pin
 from utime import sleep
 import _thread as t
@@ -72,14 +72,14 @@ def testzone(lat, lon):
         print("Inde i zonen")
         send_data_info("0")
         send_debug_info("Inde i zonen")
-        led_ring_controller.clear()
+        led_ring.clear()
         vib.value(0)
         return True
     #Hvis spilleren er ude for zonen
     else:
         print("Ude af zonen")
         #Starter thread til LED Bounce funktion, virker ikke nu da hardware har problemer.
-        t.start_new_thread(led_ring_controller.bounce,(50,0,0,100))
+        t.start_new_thread(led_ring.bounce,(50,0,0,100))
         vib.value(1)
         send_data_info("1")
         send_debug_info("Ude af zonen")
@@ -125,7 +125,7 @@ while True:
                 stopmeIndicator = True
                 stopmeGPS = True
                 vib.value(0)
-                led_ring_controller.clear()
+                led_ring.clear()
                 lib.c.publish(topic=indicatorFeed, msg="0")
             sleep(2)
         else:
@@ -141,7 +141,7 @@ while True:
         lib.c.publish(topic=toggleFeed, msg="0")
         print('Ctrl-C pressed...exiting')
         vib.value(0)
-        led_ring_controller.clear()
+        led_ring.clear()
         sleep(5)
         lib.c.disconnect()
         lib.wifi.active(False)
