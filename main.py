@@ -100,6 +100,8 @@ while True:
     try:
         #Hvis toggle knap på Adafruit er tændt
         if lib.besked == "1":
+            stopmeIndicator = False
+            stopmeGPS = False
             running = True
             t.start_new_thread(thread_GPS,())
             print("hello")
