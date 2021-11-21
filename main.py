@@ -83,8 +83,7 @@ while True:
             sleep(5)
         else:
             print("Not Running")
-        if running is True:
-            get_time()      
+        if running is True: 
             print("in main loop, numBesked:", lib.numBesked)
 
             if lib.numBesked != "":
