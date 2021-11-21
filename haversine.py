@@ -1,8 +1,4 @@
-import math
-
-def main():
-    pass
-
+#Gennemsnitlig meter på grad, ift. længegrader og breddegrader.
 meterPerDeg = 0.0000089
 
 #Skaber en zone ud fra en lokation, f.eks. spilleren. Der måles så i meter fra midten og ud, så zonen passer til hver enkelte spiller.
@@ -17,6 +13,9 @@ def makeZone(playerPos,x,y):
         negResult.append(item2-item1)
 
     return [result,negResult]
+
+def main():
+    pass
 
 if __name__ == "__main__":
     main()

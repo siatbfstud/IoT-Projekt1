@@ -4,9 +4,15 @@ from utime import sleep
 import _thread as t
 from gpsfunk import gps_funk
 
-
+#Definerer vibrator og MQTT
 vib = Pin(19, Pin.OUT, value = 0)
 lib = umqtt_robust2
+
+#Definerer globale variabler
+stopmeGPS = False
+stopmeIndicator = False
+gps_ada = str()
+running = False
 
 #Forskellige feeds til Adafruit IO
 mapFeed = bytes('{:s}/feeds/{:s}'.format(b'siatbf', b'iotfeed.map/csv'), 'utf-8')
@@ -23,6 +29,7 @@ def send_debug_info(string):
 def send_data_info(string):
     lib.c.publish(topic=dataFeed, msg=string)
 
+#Thread til GPS
 def thread_GPS(): 
     global stopmeGPS
     while stopmeGPS is False:
@@ -30,7 +37,8 @@ def thread_GPS():
             global gps_ada
             global latLon
             gps_ada = gps_funk()
-            latLon = gps_ada.rsplit(",")
+            #Laver liste ud af gps_ada
+            latLon = gps_ada.split(",")
             #Publisher til adafruit map
             lib.c.publish(mapFeed,"0.0,"+gps_ada+",0.0")
             sleep(5)
@@ -70,27 +78,18 @@ def testzone(lat, lon):
     #Hvis spilleren er ude for zonen
     else:
         print("Ude af zonen")
-        #stopmeGPS = True
-        #sleep(10)
-        #t.start_new_thread(led_ring_controller.bounce,(50,0,0,100))
-        #sleep(10)
-        #stopmeGPS = False
-        #t.start_new_thread(thread_GPS,())
+        #Starter thread til LED Bounce funktion, virker ikke nu da hardware har problemer.
+        t.start_new_thread(led_ring_controller.bounce,(50,0,0,100))
         vib.value(1)
         send_data_info("1")
         send_debug_info("Ude af zonen")
         return False
-
 
 def zone_picker(nr):
     geofence.zone_setup(nr)
     sleep(3)
     return
 
-stopmeGPS = False
-stopmeIndicator = False
-gps_ada = str()
-running = False
 #Main loop
 while True:
     if lib.c.is_conn_issue():
@@ -99,22 +98,17 @@ while True:
         else:
             lib.c.resubscribe()
     try:
+        #Hvis toggle knap på Adafruit er tændt
         if lib.besked == "1":
             running = True
             t.start_new_thread(thread_GPS,())
-<<<<<<< HEAD
-            sleep(5)
-        else:
-            print("Not Running")
-        if running is True: 
-=======
             print("hello")
             lib.besked = ""
             sleep(2)
-        if running is True:    
->>>>>>> 7a5e4ef466ee08e397d7847e9858353235b4513b
+        #Running er en global variable styret af toggle fra Adafruit
+        if running is True:
             print("in main loop, numBesked:", lib.numBesked)
-            
+            #Tjekker numpad værdi fra Adafruit, og sender den videre til zonepicker funktionen
             if lib.numBesked != "":
                 zone_picker(int(lib.numBesked))
                 t.start_new_thread(thread_indicator,())
@@ -123,6 +117,7 @@ while True:
 
             lib.c.check_msg()
             lib.c.send_queue()
+            #Hvis toggle knap er slukket
             if lib.besked == "0":
                 running = False
                 stopmeIndicator = True
@@ -133,7 +128,7 @@ while True:
             sleep(2)
         else:
             print("Not Running")
-            send_debug_info("Not Runnig")
+            send_debug_info("Not Running")
         sleep(5) 
 
     except KeyboardInterrupt:
@@ -158,40 +153,3 @@ while True:
         print(e)
     lib.c.check_msg()
     lib.c.send_queue()
-
-lib.c.disconnect()
-
-
-
-""" 
-Filer vi skal kende:
-boot.py
-main.py
-geofence.py
-gpfunk.py
-haversine.py
-led_ring_controller.py
-PlayerClass.py
-
-
-TO DO
-Tænd LED ring når spiller forlader zone
-Ude af zone starttid til graf og tid brugt ude
-
-Processen:
- - Self generated zones uden knap - 
-    Spilleren stiller sig i midten af den zone han skal spille i og vender sig mod et mål.
-    Træner/hjælpetræner kan på adafruit vælge zonens bredde og længde som bliver genereret ud fra spillerens position og retning og aktiverer den. 
-    Træneren vælger på adafruit når zonen skal være inaktiv og træningen er ovre
-
-
- - Pre defined zones med knap - 
-    Spilleren stiller sig et sted i sin zone der er defineret og valgt i adafruit. 
-    Når spilleren er ude af zonen bliver data sendt til adafruit med tidspunkter.
-    
-
-Når spilleren er ude fra zonen, bouncer LED-ring rødt og vibrator tænder. 
-Samtidig ændrer Zone-indicatoren på adafruit til rød og et timestamp, samt hvor lang tid personen var ude af zonen sendt til adafruit.
-
-Når en zone "lukkes", bliver data timestamp og tid ude fra zonen lagt på et feed som spilleren kan se efter træning.
-"""
