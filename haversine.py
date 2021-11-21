@@ -1,7 +1,9 @@
 #Gennemsnitlig meter på grad, ift. længegrader og breddegrader.
 meterPerDeg = 0.0000089
 
-#Skaber en zone ud fra en lokation, f.eks. spilleren. Der måles så i meter fra midten og ud, så zonen passer til hver enkelte spiller.
+#Skaber en zone ud fra en lokation, f.eks. spilleren. 
+#Der måles så i meter fra midten og ud, så zonen passer til hver enkelte spiller.
+
 def makeZone(playerPos,x,y):
     """X og Y er bredde og længde på kassen"""
     negResult = []
