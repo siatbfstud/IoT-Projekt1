@@ -1,7 +1,6 @@
 #import haversine
 #import PlayerClass
 import picket, ujson, uio
-from machine import Pin
 
 global my_fence
 my_fence = picket.Fence()

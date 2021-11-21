@@ -16,8 +16,6 @@ def gps_funk():
         formattedLat = formattedLat[:-3]
         formattedLon = gps.longitude_string()
         formattedLon = formattedLon[:-3]
-        formattedSpd = gps.speed_string()
-        formattedSpd = formattedSpd[:-5]
 
         #Formaterer data så den er læselig af andre funktioner og Adafruit
         gps_ada = formattedLat+","+formattedLon
