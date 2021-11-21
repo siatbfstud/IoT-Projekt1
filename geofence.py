@@ -7,7 +7,7 @@ from machine import Pin
 import _thread as t
 
 vib = Pin(19, Pin.OUT, value = 0)
-
+global my_fence
 my_fence = picket.Fence()
 
 def zone_setup(nr, lat:float=0, lon:float=0):
@@ -29,26 +29,28 @@ def zone_setup(nr, lat:float=0, lon:float=0):
     return
 
 
-def testzone(lat, lon):
-    import main
-
+""" def testzone(lat, lon):
+    #import main
+    print("inde i testzone")
     #Hvis spillerene er inde for zonen
     if my_fence.check_point((lat, lon)) == True:
         print("Inde i zonen")
-        main.send_data_info("0")
-        main.send_debug_info("Inde i zonen")
+        #main.send_data_info("0")
+        #main.send_debug_info("Inde i zonen")
         led_ring_controller.clear()
         vib.value(0)
         return True
     #Hvis spilleren er ude for zonen
     else:
         print("Ude af zonen")
-        main.stopme = True
+        #main.stopmeGPS = True
         t.start_new_thread(led_ring_controller.bounce,(50,0,0,100))
-        main.stopme = False
+        #main.stopmeGPS = False
         t.start_new_thread(main.thread_GPS,())
         print("after LED call")
         vib.value(1)
-        main.send_data_info("1")
-        main.send_debug_info("Ude af zonen")
-        return False
+        #main.send_data_info("1")
+        #main.send_debug_info("Ude af zonen")
+        return False """
+
+#zone_setup("1")
