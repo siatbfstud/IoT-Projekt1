@@ -16,7 +16,6 @@ def gps_funk():
         formattedLat = formattedLat[:-3]
         formattedLon = gps.longitude_string()
         formattedLon = formattedLon[:-3]
-        formattedAlt = str(gps.altitude)
         formattedSpd = gps.speed_string()
         formattedSpd = formattedSpd[:-5]
 
